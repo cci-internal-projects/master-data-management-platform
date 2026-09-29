@@ -1,0 +1,615 @@
+{
+  "communities": {
+    "0": [
+      "datetime",
+      "mdm_platform_airflow_dags_non_sm_to_sm",
+      "mdm_platform_airflow_dags_non_sm_to_sm_bulk_set_consumer_parameters",
+      "mdm_platform_airflow_dags_non_sm_to_sm_bulk_set_device_parameters",
+      "mdm_platform_airflow_dags_non_sm_to_sm_bulk_set_non_sm_device_installation_parameters",
+      "mdm_platform_airflow_dags_non_sm_to_sm_bulk_set_service_point_parameters",
+      "mdm_platform_airflow_dags_non_sm_to_sm_bulk_set_sm_device_installation_parameters",
+      "mdm_platform_airflow_dags_non_sm_to_sm_complete_job_status",
+      "mdm_platform_airflow_dags_non_sm_to_sm_create_contract",
+      "mdm_platform_airflow_dags_non_sm_to_sm_create_device_installation",
+      "mdm_platform_airflow_dags_non_sm_to_sm_create_service_point",
+      "mdm_platform_airflow_dags_non_sm_to_sm_ensure_consumer",
+      "mdm_platform_airflow_dags_non_sm_to_sm_ensure_device",
+      "mdm_platform_airflow_dags_non_sm_to_sm_get_jobs",
+      "mdm_platform_airflow_dags_non_sm_to_sm_py_short_circuit",
+      "mdm_platform_airflow_dags_non_sm_to_sm_py_task",
+      "mdm_platform_airflow_dags_non_sm_to_sm_task_1",
+      "mdm_platform_airflow_dags_non_sm_to_sm_task_2",
+      "mdm_platform_bses_module_models",
+      "mdm_platform_bses_module_models_nonsmtosmjob",
+      "mdm_platform_bses_module_models_nonsmtosmjob_str",
+      "mdm_platform_bses_module_models_states",
+      "mdm_platform_bses_module_views_non_sm_to_sm_replacement",
+      "mdm_platform_core_models",
+      "mdm_platform_core_models_consumer",
+      "mdm_platform_core_models_consumer_str",
+      "mdm_platform_core_models_consumerparameterdefinition",
+      "mdm_platform_core_models_consumerparameterdefinition_str",
+      "mdm_platform_core_models_consumerparametervalue",
+      "mdm_platform_core_models_contract",
+      "mdm_platform_core_models_contract_str",
+      "mdm_platform_core_models_device",
+      "mdm_platform_core_models_device_str",
+      "mdm_platform_core_models_deviceinstallation",
+      "mdm_platform_core_models_deviceinstallation_str",
+      "mdm_platform_core_models_deviceinstallationparameterdefinition",
+      "mdm_platform_core_models_deviceinstallationparameterdefinition_str",
+      "mdm_platform_core_models_deviceinstallationparametervalue",
+      "mdm_platform_core_models_deviceparameterdefinition",
+      "mdm_platform_core_models_deviceparameterdefinition_str",
+      "mdm_platform_core_models_deviceparametervalue",
+      "mdm_platform_core_models_devicestatus",
+      "mdm_platform_core_models_devicetemplate",
+      "mdm_platform_core_models_devicetemplate_str",
+      "mdm_platform_core_models_devicetype",
+      "mdm_platform_core_models_devicetype_str",
+      "mdm_platform_core_models_electricalnode",
+      "mdm_platform_core_models_electricalnode_str",
+      "mdm_platform_core_models_electricalnodetype",
+      "mdm_platform_core_models_geographicalnode",
+      "mdm_platform_core_models_geographicalnode_str",
+      "mdm_platform_core_models_geographicalnodetype",
+      "mdm_platform_core_models_meta",
+      "mdm_platform_core_models_parameterdatatype",
+      "mdm_platform_core_models_paymenttype",
+      "mdm_platform_core_models_servicepoint",
+      "mdm_platform_core_models_servicepoint_str",
+      "mdm_platform_core_models_servicepointparameterdefinition",
+      "mdm_platform_core_models_servicepointparameterdefinition_str",
+      "mdm_platform_core_models_servicepointparametervalue"
+    ],
+    "1": [
+      "mdm_platform_zonos_northbound_api_northbound_api_exception_handler",
+      "mdm_platform_zonos_northbound_api_northbound_api_invalid_token_exception",
+      "mdm_platform_zonos_northbound_api_northbound_api_northboundapi",
+      "mdm_platform_zonos_northbound_api_northbound_api_northboundapi_bulkcreatereadprofile",
+      "mdm_platform_zonos_northbound_api_northbound_api_northboundapi_createdisconnectorcontrolconnect",
+      "mdm_platform_zonos_northbound_api_northbound_api_northboundapi_createdisconnectorcontroldisconnect",
+      "mdm_platform_zonos_northbound_api_northbound_api_northboundapi_createdisconnectorcontrolstate",
+      "mdm_platform_zonos_northbound_api_northbound_api_northboundapi_creategenericaction",
+      "mdm_platform_zonos_northbound_api_northbound_api_northboundapi_creategetactiviycalender",
+      "mdm_platform_zonos_northbound_api_northbound_api_northboundapi_creategetloadlimiterconfiguration",
+      "mdm_platform_zonos_northbound_api_northbound_api_northboundapi_createmaximumdemandreset",
+      "mdm_platform_zonos_northbound_api_northbound_api_northboundapi_createreadlog",
+      "mdm_platform_zonos_northbound_api_northbound_api_northboundapi_createreadparameter",
+      "mdm_platform_zonos_northbound_api_northbound_api_northboundapi_createreadprofile",
+      "mdm_platform_zonos_northbound_api_northbound_api_northboundapi_createreadtime",
+      "mdm_platform_zonos_northbound_api_northbound_api_northboundapi_createsetactiviycalender",
+      "mdm_platform_zonos_northbound_api_northbound_api_northboundapi_createsetloadlimiterconfiguration",
+      "mdm_platform_zonos_northbound_api_northbound_api_northboundapi_createsynctime",
+      "mdm_platform_zonos_northbound_api_northbound_api_northboundapi_createwriteparameter",
+      "mdm_platform_zonos_northbound_api_northbound_api_northboundapi_get_meteredataprofile",
+      "mdm_platform_zonos_northbound_api_northbound_api_northboundapi_getactivitycalendarconfiguration",
+      "mdm_platform_zonos_northbound_api_northbound_api_northboundapi_getdeviceevents",
+      "mdm_platform_zonos_northbound_api_northbound_api_northboundapi_getdisconnectcontrolconnectstatus",
+      "mdm_platform_zonos_northbound_api_northbound_api_northboundapi_getdisconnectcontroldisconnectstatus",
+      "mdm_platform_zonos_northbound_api_northbound_api_northboundapi_getdisconnectorcontrolstatestatus",
+      "mdm_platform_zonos_northbound_api_northbound_api_northboundapi_gettransactionresults",
+      "mdm_platform_zonos_northbound_api_northbound_api_northboundapi_init",
+      "mdm_platform_zonos_northbound_api_northbound_api_northboundapi_log_error",
+      "mdm_platform_zonos_northbound_api_northbound_api_northboundapi_request_api_token",
+      "mdm_platform_zonos_northbound_api_northbound_api_py_httpstatuserror",
+      "mdm_platform_zonos_northbound_api_northbound_api_py_p",
+      "mdm_platform_zonos_northbound_api_northbound_api_py_r",
+      "mdm_platform_zonos_northbound_api_northbound_api_rationale_114",
+      "mdm_platform_zonos_northbound_api_northbound_api_rationale_123",
+      "mdm_platform_zonos_northbound_api_northbound_api_rationale_132",
+      "mdm_platform_zonos_northbound_api_northbound_api_rationale_61",
+      "mdm_platform_zonos_northbound_api_northbound_api_rationale_83"
+    ],
+    "2": [
+      "any",
+      "mdm_platform_config_init",
+      "mdm_platform_zonos_northbound_api_northbound_api",
+      "mdm_platform_zonos_northbound_api_northbound_api_v2",
+      "mdm_platform_zonos_northbound_api_northbound_api_v2_exception_handler",
+      "mdm_platform_zonos_northbound_api_northbound_api_v2_invalid_token_exception",
+      "mdm_platform_zonos_northbound_api_northbound_api_v2_northboundapi",
+      "mdm_platform_zonos_northbound_api_northbound_api_v2_northboundapi_bulksetmeteringpointparameters",
+      "mdm_platform_zonos_northbound_api_northbound_api_v2_northboundapi_createcustomer",
+      "mdm_platform_zonos_northbound_api_northbound_api_v2_northboundapi_createdevice",
+      "mdm_platform_zonos_northbound_api_northbound_api_v2_northboundapi_createmeteringpoint",
+      "mdm_platform_zonos_northbound_api_northbound_api_v2_northboundapi_init",
+      "mdm_platform_zonos_northbound_api_northbound_api_v2_northboundapi_log_error",
+      "mdm_platform_zonos_northbound_api_northbound_api_v2_northboundapi_request_api_token",
+      "mdm_platform_zonos_northbound_api_northbound_api_v2_northboundapi_setdeviceparameter",
+      "mdm_platform_zonos_northbound_api_northbound_api_v2_northboundapi_setmeteringpointparameters",
+      "mdm_platform_zonos_northbound_api_northbound_api_v2_py_httpstatuserror",
+      "mdm_platform_zonos_northbound_api_northbound_api_v2_py_p",
+      "mdm_platform_zonos_northbound_api_northbound_api_v2_py_r",
+      "mdm_platform_zonos_northbound_api_northbound_api_v2_rationale_19",
+      "mdm_platform_zonos_northbound_api_northbound_api_v2_rationale_41",
+      "mdm_platform_zonos_northbound_api_northbound_api_v2_rationale_72",
+      "mdm_platform_zonos_northbound_api_northbound_api_v2_rationale_81",
+      "mdm_platform_zonos_northbound_api_northbound_api_v2_rationale_90",
+      "mdm_platform_zonos_northbound_api_northbound_client",
+      "mdm_platform_zonos_northbound_api_rest_client",
+      "mdm_platform_zonos_northbound_api_rest_client_rationale_10",
+      "mdm_platform_zonos_northbound_api_rest_client_rationale_17",
+      "mdm_platform_zonos_northbound_api_rest_client_rest_client",
+      "mdm_platform_zonos_northbound_api_rest_client_rest_client_get",
+      "mdm_platform_zonos_northbound_api_rest_client_rest_client_init",
+      "mdm_platform_zonos_northbound_api_rest_client_rest_client_post",
+      "mdm_platform_zonos_northbound_api_rest_client_rest_client_prepare_headers",
+      "mdm_platform_zonos_northbound_api_rest_client_rest_client_put",
+      "response"
+    ],
+    "3": [
+      "mdm_platform_airflow_dags_billing_rcm",
+      "mdm_platform_bses_module_schemas",
+      "mdm_platform_bses_module_schemas_additionalnonmandatoryparams",
+      "mdm_platform_bses_module_schemas_billingrcmrequest",
+      "mdm_platform_bses_module_schemas_billingrcmrequest_duplicate_devices_check",
+      "mdm_platform_bses_module_schemas_billingrcmrequest_validate_time_range",
+      "mdm_platform_bses_module_schemas_billingrcmresponse",
+      "mdm_platform_bses_module_schemas_consumermaster",
+      "mdm_platform_bses_module_schemas_consumermasterhierarchy",
+      "mdm_platform_bses_module_schemas_electricalmasterhierarchy",
+      "mdm_platform_bses_module_schemas_financialdetails",
+      "mdm_platform_bses_module_schemas_geographicalmasterhierarchy",
+      "mdm_platform_bses_module_schemas_newmeterdetails",
+      "mdm_platform_bses_module_schemas_nonsmarttosmartrequest",
+      "mdm_platform_bses_module_schemas_nonsmarttosmartresponse",
+      "mdm_platform_bses_module_schemas_oldmeterdetails",
+      "mdm_platform_bses_module_schemas_py_basemodel",
+      "mdm_platform_bses_module_views_billing_rcm",
+      "mdm_platform_bses_module_views_billing_rcm_billingrcmview",
+      "mdm_platform_bses_module_views_billing_rcm_billingrcmview_init",
+      "mdm_platform_bses_module_views_billing_rcm_billingrcmview_launch_odr",
+      "mdm_platform_bses_module_views_billing_rcm_billingrcmview_post",
+      "mdm_platform_bses_module_views_billing_rcm_billingrcmview_validation_errors",
+      "mdm_platform_bses_module_views_billing_rcm_py_apiview",
+      "mdm_platform_bses_module_views_billing_rcm_py_extend_schema",
+      "mdm_platform_bses_module_views_billing_rcm_py_validationerror",
+      "model_validator"
+    ],
+    "4": [
+      "mdm_platform_core_admin",
+      "mdm_platform_core_admin_consumeradmin",
+      "mdm_platform_core_admin_consumerparameterdefinitionadmin",
+      "mdm_platform_core_admin_consumerparametervalueadmin",
+      "mdm_platform_core_admin_contractadmin",
+      "mdm_platform_core_admin_deviceadmin",
+      "mdm_platform_core_admin_deviceinstallationadmin",
+      "mdm_platform_core_admin_deviceinstallationparameterdefinitionadmin",
+      "mdm_platform_core_admin_deviceinstallationparametervalueadmin",
+      "mdm_platform_core_admin_deviceparameterdefinitionadmin",
+      "mdm_platform_core_admin_deviceparametervalueadmin",
+      "mdm_platform_core_admin_devicetemplateadmin",
+      "mdm_platform_core_admin_devicetypeadmin",
+      "mdm_platform_core_admin_devicetypetemplatemapadmin",
+      "mdm_platform_core_admin_electricalnodeadmin",
+      "mdm_platform_core_admin_geographicalnodeadmin",
+      "mdm_platform_core_admin_py_register",
+      "mdm_platform_core_admin_servicepointadmin",
+      "mdm_platform_core_admin_servicepointparameterdefinitionadmin",
+      "mdm_platform_core_admin_servicepointparametervalueadmin",
+      "mdm_platform_core_models_devicetypetemplatemap",
+      "mdm_platform_core_models_devicetypetemplatemap_str"
+    ],
+    "5": [
+      "mdm_platform_airflow_dags_billing_rcm_get_jobs",
+      "mdm_platform_airflow_dags_billing_rcm_launch_dct",
+      "mdm_platform_airflow_dags_billing_rcm_py_short_circuit",
+      "mdm_platform_airflow_dags_billing_rcm_py_task",
+      "mdm_platform_bses_module_admin",
+      "mdm_platform_bses_module_admin_billingrcmjobadmin",
+      "mdm_platform_bses_module_admin_nonsmtosmjobadmin",
+      "mdm_platform_bses_module_admin_py_register",
+      "mdm_platform_bses_module_models_billingrcmjob",
+      "mdm_platform_bses_module_models_billingrcmjob_str",
+      "mdm_platform_bses_module_models_meta"
+    ],
+    "6": [
+      "mdm_platform_bses_module_urls",
+      "mdm_platform_bses_module_views_non_sm_to_sm_replacement_nonsmarttosmartreplacementview",
+      "mdm_platform_bses_module_views_non_sm_to_sm_replacement_nonsmarttosmartreplacementview_init",
+      "mdm_platform_bses_module_views_non_sm_to_sm_replacement_nonsmarttosmartreplacementview_post",
+      "mdm_platform_bses_module_views_non_sm_to_sm_replacement_nonsmarttosmartreplacementview_validation_errors",
+      "mdm_platform_bses_module_views_non_sm_to_sm_replacement_py_apiview",
+      "mdm_platform_bses_module_views_non_sm_to_sm_replacement_py_extend_schema",
+      "mdm_platform_bses_module_views_non_sm_to_sm_replacement_py_validationerror"
+    ],
+    "7": [
+      "basecommand",
+      "mdm_platform_config_settings",
+      "mdm_platform_config_settings_rationale_1",
+      "mdm_platform_core_management_commands_init_admin",
+      "mdm_platform_core_management_commands_init_admin_command",
+      "mdm_platform_core_management_commands_init_admin_command_handle"
+    ],
+    "8": [
+      "mdm_platform_core_migrations_0003_create_root_nodes",
+      "mdm_platform_core_migrations_0003_create_root_nodes_create_electrical_root_nodes",
+      "mdm_platform_core_migrations_0003_create_root_nodes_create_geographical_root_nodes",
+      "mdm_platform_core_migrations_0003_create_root_nodes_migration"
+    ],
+    "9": [
+      "mdm_platform_bses_module_apps",
+      "mdm_platform_bses_module_apps_bsesmoduleconfig",
+      "mdm_platform_bses_module_apps_py_appconfig"
+    ],
+    "10": [
+      "mdm_platform_core_apps",
+      "mdm_platform_core_apps_coreconfig",
+      "mdm_platform_core_apps_py_appconfig"
+    ],
+    "11": [
+      "mdm_platform_manage",
+      "mdm_platform_manage_main",
+      "mdm_platform_manage_rationale_9"
+    ],
+    "12": [
+      "mdm_platform_zonos_northbound_api_models_set_metering_point_parameters_request",
+      "mdm_platform_zonos_northbound_api_models_set_metering_point_parameters_request_py_basemodel",
+      "mdm_platform_zonos_northbound_api_models_set_metering_point_parameters_request_setmeteringpointparametersrequest"
+    ],
+    "13": [
+      "mdm_platform_bses_module_migrations_0001_initial",
+      "mdm_platform_bses_module_migrations_0001_initial_migration"
+    ],
+    "14": [
+      "mdm_platform_bses_module_migrations_0002_rename_billing_rcm_records_job_run_count_idx_billing_rcm_jobs_run_count_idx",
+      "mdm_platform_bses_module_migrations_0002_rename_billing_rcm_records_job_run_count_idx_billing_rcm_jobs_run_count_idx_migration"
+    ],
+    "15": [
+      "mdm_platform_bses_module_migrations_0003_rename_billingrcmjobs_billingrcmjob_and_more",
+      "mdm_platform_bses_module_migrations_0003_rename_billingrcmjobs_billingrcmjob_and_more_migration"
+    ],
+    "16": [
+      "mdm_platform_bses_module_migrations_0004_alter_nonsmtosmjob_job_id",
+      "mdm_platform_bses_module_migrations_0004_alter_nonsmtosmjob_job_id_migration"
+    ],
+    "17": [
+      "mdm_platform_bses_module_migrations_0005_alter_nonsmtosmjob_consumer_id_and_more",
+      "mdm_platform_bses_module_migrations_0005_alter_nonsmtosmjob_consumer_id_and_more_migration"
+    ],
+    "18": [
+      "mdm_platform_bses_module_migrations_0006_alter_nonsmtosmjob_service_point_id",
+      "mdm_platform_bses_module_migrations_0006_alter_nonsmtosmjob_service_point_id_migration"
+    ],
+    "19": [
+      "mdm_platform_bses_module_migrations_0007_alter_nonsmtosmjob_non_sm_device_id",
+      "mdm_platform_bses_module_migrations_0007_alter_nonsmtosmjob_non_sm_device_id_migration"
+    ],
+    "20": [
+      "mdm_platform_bses_module_migrations_0008_alter_nonsmtosmjob_job_run_at",
+      "mdm_platform_bses_module_migrations_0008_alter_nonsmtosmjob_job_run_at_migration"
+    ],
+    "21": [
+      "mdm_platform_bses_module_migrations_0009_remove_billingrcmjob_job_run_count_and_more",
+      "mdm_platform_bses_module_migrations_0009_remove_billingrcmjob_job_run_count_and_more_migration"
+    ],
+    "22": [
+      "mdm_platform_bses_module_migrations_0010_remove_billingrcmjob_billing_rcm_jobs_run_count_idx_and_more",
+      "mdm_platform_bses_module_migrations_0010_remove_billingrcmjob_billing_rcm_jobs_run_count_idx_and_more_migration"
+    ],
+    "23": [
+      "mdm_platform_bses_module_migrations_0011_rename_billing_rcm_remaining_attempts_idx_billing_rcm_retries_idx",
+      "mdm_platform_bses_module_migrations_0011_rename_billing_rcm_remaining_attempts_idx_billing_rcm_retries_idx_migration"
+    ],
+    "24": [
+      "mdm_platform_bses_module_migrations_0012_alter_billingrcmjob_message",
+      "mdm_platform_bses_module_migrations_0012_alter_billingrcmjob_message_migration"
+    ],
+    "25": [
+      "mdm_platform_bses_module_migrations_0013_alter_billingrcmjob_message",
+      "mdm_platform_bses_module_migrations_0013_alter_billingrcmjob_message_migration"
+    ],
+    "26": [
+      "mdm_platform_config_asgi",
+      "mdm_platform_config_asgi_rationale_1"
+    ],
+    "27": [
+      "mdm_platform_config_urls",
+      "mdm_platform_config_urls_rationale_1"
+    ],
+    "28": [
+      "mdm_platform_config_wsgi",
+      "mdm_platform_config_wsgi_rationale_1"
+    ],
+    "29": [
+      "mdm_platform_core_migrations_0001_initial",
+      "mdm_platform_core_migrations_0001_initial_migration"
+    ],
+    "30": [
+      "mdm_platform_core_migrations_0002_alter_consumerparameterdefinition_data_type_and_more",
+      "mdm_platform_core_migrations_0002_alter_consumerparameterdefinition_data_type_and_more_migration"
+    ],
+    "31": [
+      "mdm_platform_core_migrations_0004_remove_device_prepaid_postpaid_flag_and_more",
+      "mdm_platform_core_migrations_0004_remove_device_prepaid_postpaid_flag_and_more_migration"
+    ],
+    "32": [
+      "mdm_platform_core_migrations_0005_alter_devicetemplate_id_alter_devicetype_id_and_more",
+      "mdm_platform_core_migrations_0005_alter_devicetemplate_id_alter_devicetype_id_and_more_migration"
+    ],
+    "33": [
+      "mdm_platform_core_migrations_0006_alter_devicetype_id",
+      "mdm_platform_core_migrations_0006_alter_devicetype_id_migration"
+    ],
+    "34": [
+      "mdm_platform_core_migrations_0007_alter_contract_service_point",
+      "mdm_platform_core_migrations_0007_alter_contract_service_point_migration"
+    ],
+    "35": [
+      "mdm_platform_core_migrations_0008_alter_contract_service_point",
+      "mdm_platform_core_migrations_0008_alter_contract_service_point_migration"
+    ],
+    "36": [
+      "mdm_platform_core_migrations_0009_devicetypetemplatemap_unique_device_type_template",
+      "mdm_platform_core_migrations_0009_devicetypetemplatemap_unique_device_type_template_migration"
+    ],
+    "37": [
+      "mdm_platform_core_migrations_0010_alter_deviceparametervalue_device_and_more",
+      "mdm_platform_core_migrations_0010_alter_deviceparametervalue_device_and_more_migration"
+    ],
+    "38": [
+      "mdm_platform_core_migrations_0011_alter_devicetypetemplatemap_id",
+      "mdm_platform_core_migrations_0011_alter_devicetypetemplatemap_id_migration"
+    ],
+    "39": [
+      "mdm_platform_core_migrations_0012_remove_consumer_consumer_entry_dt_idx_and_more",
+      "mdm_platform_core_migrations_0012_remove_consumer_consumer_entry_dt_idx_and_more_migration"
+    ],
+    "40": [
+      "mdm_platform_core_migrations_0013_alter_geographicalnode_name",
+      "mdm_platform_core_migrations_0013_alter_geographicalnode_name_migration"
+    ],
+    "41": [
+      "mdm_platform_core_migrations_0014_alter_geographicalnode_name",
+      "mdm_platform_core_migrations_0014_alter_geographicalnode_name_migration"
+    ],
+    "42": [
+      "mdm_platform_core_migrations_0015_alter_electricalnode_name_and_more",
+      "mdm_platform_core_migrations_0015_alter_electricalnode_name_and_more_migration"
+    ],
+    "43": [
+      "mdm_platform_core_migrations_0016_deviceinstallationparameterdefinition_and_more",
+      "mdm_platform_core_migrations_0016_deviceinstallationparameterdefinition_and_more_migration"
+    ],
+    "44": [
+      "mdm_platform_main",
+      "mdm_platform_main_main"
+    ],
+    "45": [
+      "mdm_platform_scripts_init",
+      "mdm_platform_scripts_init_sh__entry"
+    ],
+    "46": [
+      "mdm_platform_scripts_runner",
+      "mdm_platform_scripts_runner_sh__entry"
+    ],
+    "47": [
+      "mdm_platform_bses_module_init"
+    ],
+    "48": [
+      "mdm_platform_bses_module_migrations_init"
+    ],
+    "49": [
+      "mdm_platform_bses_module_tests"
+    ],
+    "50": [
+      "mdm_platform_core_init"
+    ],
+    "51": [
+      "mdm_platform_core_migrations_init"
+    ],
+    "52": [
+      "mdm_platform_core_tests"
+    ],
+    "53": [
+      "mdm_platform_core_views"
+    ],
+    "54": [
+      "pkg_mdm_platform"
+    ]
+  },
+  "cohesion": {
+    "0": 0.08531073446327683,
+    "1": 0.12462462462462462,
+    "2": 0.10588235294117647,
+    "3": 0.13675213675213677,
+    "4": 0.1645021645021645,
+    "5": 0.2,
+    "6": 0.2857142857142857,
+    "7": 0.3333333333333333,
+    "8": 0.5,
+    "9": 0.6666666666666666,
+    "10": 0.6666666666666666,
+    "11": 0.6666666666666666,
+    "12": 0.6666666666666666,
+    "13": 1.0,
+    "14": 1.0,
+    "15": 1.0,
+    "16": 1.0,
+    "17": 1.0,
+    "18": 1.0,
+    "19": 1.0,
+    "20": 1.0,
+    "21": 1.0,
+    "22": 1.0,
+    "23": 1.0,
+    "24": 1.0,
+    "25": 1.0,
+    "26": 1.0,
+    "27": 1.0,
+    "28": 1.0,
+    "29": 1.0,
+    "30": 1.0,
+    "31": 1.0,
+    "32": 1.0,
+    "33": 1.0,
+    "34": 1.0,
+    "35": 1.0,
+    "36": 1.0,
+    "37": 1.0,
+    "38": 1.0,
+    "39": 1.0,
+    "40": 1.0,
+    "41": 1.0,
+    "42": 1.0,
+    "43": 1.0,
+    "44": 1.0,
+    "45": 1.0,
+    "46": 1.0,
+    "47": 1.0,
+    "48": 1.0,
+    "49": 1.0,
+    "50": 1.0,
+    "51": 1.0,
+    "52": 1.0,
+    "53": 1.0,
+    "54": 1.0
+  },
+  "gods": [
+    {
+      "id": "mdm_platform_zonos_northbound_api_northbound_api_northboundapi",
+      "label": "NorthboundApi",
+      "degree": 32
+    },
+    {
+      "id": "mdm_platform_zonos_northbound_api_northbound_api_exception_handler",
+      "label": "exception_handler()",
+      "degree": 27
+    },
+    {
+      "id": "mdm_platform_zonos_northbound_api_northbound_api_invalid_token_exception",
+      "label": "invalid_token_exception()",
+      "degree": 27
+    },
+    {
+      "id": "mdm_platform_core_models_meta",
+      "label": "Meta",
+      "degree": 18
+    },
+    {
+      "id": "mdm_platform_airflow_dags_non_sm_to_sm_task_1",
+      "label": "task_1()",
+      "degree": 16
+    },
+    {
+      "id": "mdm_platform_zonos_northbound_api_northbound_api_v2_northboundapi",
+      "label": "NorthboundApi",
+      "degree": 15
+    },
+    {
+      "id": "mdm_platform_zonos_northbound_api_rest_client_rest_client",
+      "label": "Rest_client",
+      "degree": 13
+    },
+    {
+      "id": "mdm_platform_bses_module_models_states",
+      "label": "States",
+      "degree": 12
+    },
+    {
+      "id": "mdm_platform_bses_module_models_nonsmtosmjob",
+      "label": "NonSmToSmJob",
+      "degree": 11
+    },
+    {
+      "id": "mdm_platform_bses_module_views_billing_rcm_billingrcmview",
+      "label": "BillingRcmView",
+      "degree": 11
+    }
+  ],
+  "surprises": [
+    {
+      "source": "NonSmartToSmartReplacementView",
+      "target": "NonSmToSmJob",
+      "source_files": [
+        "mdm-platform/bses_module/views/non_sm_to_sm_replacement.py",
+        "mdm-platform/bses_module/models.py"
+      ],
+      "confidence": "INFERRED",
+      "relation": "uses",
+      "why": "inferred connection - not explicitly stated in source; bridges separate communities"
+    },
+    {
+      "source": "BillingRcmResponse",
+      "target": "States",
+      "source_files": [
+        "mdm-platform/bses_module/schemas.py",
+        "mdm-platform/bses_module/models.py"
+      ],
+      "confidence": "INFERRED",
+      "relation": "uses",
+      "why": "inferred connection - not explicitly stated in source; bridges separate communities"
+    },
+    {
+      "source": "BillingRcmView",
+      "target": "States",
+      "source_files": [
+        "mdm-platform/bses_module/views/billing_rcm.py",
+        "mdm-platform/bses_module/models.py"
+      ],
+      "confidence": "INFERRED",
+      "relation": "uses",
+      "why": "inferred connection - not explicitly stated in source; bridges separate communities"
+    },
+    {
+      "source": "NonSmartToSmartReplacementView",
+      "target": "States",
+      "source_files": [
+        "mdm-platform/bses_module/views/non_sm_to_sm_replacement.py",
+        "mdm-platform/bses_module/models.py"
+      ],
+      "confidence": "INFERRED",
+      "relation": "uses",
+      "why": "inferred connection - not explicitly stated in source; bridges separate communities"
+    },
+    {
+      "source": "BillingRcmView",
+      "target": "NorthboundApi",
+      "source_files": [
+        "mdm-platform/bses_module/views/billing_rcm.py",
+        "mdm-platform/zonos_northbound_api/northbound_api.py"
+      ],
+      "confidence": "INFERRED",
+      "relation": "uses",
+      "why": "inferred connection - not explicitly stated in source; bridges separate communities"
+    }
+  ],
+  "questions": [
+    {
+      "type": "bridge_node",
+      "question": "Why does `NorthboundApi` connect `Community 1` to `Community 2`, `Community 3`?",
+      "why": "High betweenness centrality (0.129) - this node is a cross-community bridge."
+    },
+    {
+      "type": "bridge_node",
+      "question": "Why does `NorthboundApi` connect `Community 2` to `Community 0`, `Community 6`?",
+      "why": "High betweenness centrality (0.071) - this node is a cross-community bridge."
+    },
+    {
+      "type": "bridge_node",
+      "question": "Why does `Rest_client` connect `Community 2` to `Community 1`?",
+      "why": "High betweenness centrality (0.056) - this node is a cross-community bridge."
+    },
+    {
+      "type": "verify_inferred",
+      "question": "Are the 2 inferred relationships involving `NorthboundApi` (e.g. with `BillingRcmView` and `Rest_client`) actually correct?",
+      "why": "`NorthboundApi` has 2 INFERRED edges - model-reasoned connections that need verification."
+    },
+    {
+      "type": "isolated_nodes",
+      "question": "What connects `DeviceStatus`, `ElectricalNodeType`, `GeographicalNodeType` to the rest of the system?",
+      "why": "36 weakly-connected nodes found - possible documentation gaps or missing edges."
+    },
+    {
+      "type": "low_cohesion",
+      "question": "Should `Community 0` be split into smaller, more focused modules?",
+      "why": "Cohesion score 0.08531073446327683 - nodes in this community are weakly interconnected."
+    },
+    {
+      "type": "low_cohesion",
+      "question": "Should `Community 1` be split into smaller, more focused modules?",
+      "why": "Cohesion score 0.12462462462462462 - nodes in this community are weakly interconnected."
+    }
+  ]
+}

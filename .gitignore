@@ -1,0 +1,18 @@
+# Python-generated files
+__pycache__/
+*.py[oc]
+build/
+dist/
+wheels/
+*.egg-info
+
+# Virtual environments
+.venv
+
+# Local environment files
+.env
+.env.airflow
+.env.mdm-platform
+
+# Local Kubernetes credentials. Keep kube/secret.example.yaml as the template.
+kube/secret.yaml

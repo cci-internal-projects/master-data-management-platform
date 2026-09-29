@@ -1,0 +1,26 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: mdm-platform
+  labels:
+    app.kubernetes.io/name: mdm-platform
+    app.kubernetes.io/component: web
+  annotations:
+    traefik.ingress.kubernetes.io/router.entrypoints: websecure
+spec:
+  ingressClassName: replace-from-configmap
+  tls:
+    - hosts:
+        - replace-from-configmap.invalid
+      secretName: replace-from-configmap
+  rules:
+    - host: replace-from-configmap.invalid
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: mdm-platform
+                port:
+                  number: 8009

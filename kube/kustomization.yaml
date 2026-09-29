@@ -1,0 +1,78 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: mdm-platform
+
+resources:
+  - configmap.yaml
+  - secret.yaml
+  - deployment.yaml
+  - service.yaml
+  - ingress.yaml
+  - migration-job.yaml
+
+# This is the single image version selection used by both the web Deployment
+# and the one-shot migration Job.
+images:
+  - name: mdm-platform
+    newName: k8s-local-cont-regd.local:5000/cuculus/mdm-platform
+    newTag: 1.0.2
+
+replicas:
+  - name: mdm-platform
+    count: 1
+
+# Kubernetes does not read ConfigMaps while constructing an Ingress or Pod
+# specification. Kustomize replacements copy these deployment settings from
+# the same ConfigMap that owns the non-sensitive runtime configuration.
+replacements:
+  - source:
+      kind: ConfigMap
+      name: mdm-platform-config
+      fieldPath: data.INGRESS_HOST
+    targets:
+      - select:
+          kind: Ingress
+          name: mdm-platform
+        fieldPaths:
+          - spec.rules.0.host
+          - spec.tls.0.hosts.0
+  - source:
+      kind: ConfigMap
+      name: mdm-platform-config
+      fieldPath: data.INGRESS_CLASS
+    targets:
+      - select:
+          kind: Ingress
+          name: mdm-platform
+        fieldPaths:
+          - spec.ingressClassName
+  - source:
+      kind: ConfigMap
+      name: mdm-platform-config
+      fieldPath: data.INGRESS_TLS_SECRET
+    targets:
+      - select:
+          kind: Ingress
+          name: mdm-platform
+        fieldPaths:
+          - spec.tls.0.secretName
+  - source:
+      kind: ConfigMap
+      name: mdm-platform-config
+      fieldPath: data.IMAGE_PULL_SECRET
+    targets:
+      - select:
+          group: apps
+          version: v1
+          kind: Deployment
+          name: mdm-platform
+        fieldPaths:
+          - spec.template.spec.imagePullSecrets.0.name
+      - select:
+          group: batch
+          version: v1
+          kind: Job
+          name: mdm-platform-migrate-v1-0-2
+        fieldPaths:
+          - spec.template.spec.imagePullSecrets.0.name
