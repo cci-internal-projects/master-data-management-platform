@@ -1,6 +1,4 @@
-from unicodedata import name
-from airflow.utils import retries
-from datetime import datetime, timezone, timedelta
+from datetime import datetime, timedelta
 from zoneinfo import ZoneInfo
 import logging
 
@@ -13,7 +11,6 @@ django.setup()
 
 
 from zonos_northbound_api.northbound_client import client_v2
-from config import settings
 from core.models import (
     Device,
     Consumer,
@@ -41,6 +38,7 @@ from bses_module.schemas import NonSmartToSmartRequest
 logger = logging.getLogger(__name__)
 
 IST = ZoneInfo("Asia/Kolkata")
+MAX_JOBS_PER_RUN = 100
 
 
 def ensure_consumer(consumer_id: str, consumer_name: str) -> tuple[Consumer, bool]:
@@ -120,80 +118,82 @@ def create_device_installation(
     return device_installation
 
 
-def bulk_set_consumer_parameters(consumer: Consumer, parameter_config: dict) -> None:
-    parameters = ConsumerParameterDefinition.objects.filter(name__in=parameter_config.keys())
+def bulk_set_consumer_parameters(
+    consumer: Consumer, parameter_config: dict, parameter_definitions: dict
+) -> None:
     ConsumerParameterValue.objects.bulk_create(
         [
             ConsumerParameterValue(
                 consumer=consumer,
-                parameter=parameter,
-                value=parameter_config[parameter.name],
+                parameter=parameter_definitions[name],
+                value=value,
             )
-            for parameter in parameters
+            for name, value in parameter_config.items()
+            if name in parameter_definitions
         ]
     )
 
 
-def bulk_set_service_point_parameters(service_point: ServicePoint, parameter_config: dict) -> None:
-    parameters = ServicePointParameterDefinition.objects.filter(name__in=parameter_config.keys())
+def bulk_set_service_point_parameters(
+    service_point: ServicePoint, parameter_config: dict, parameter_definitions: dict
+) -> None:
     ServicePointParameterValue.objects.bulk_create(
         [
             ServicePointParameterValue(
                 service_point=service_point,
-                parameter=parameter,
-                value=parameter_config[parameter.name],
+                parameter=parameter_definitions[name],
+                value=value,
             )
-            for parameter in parameters
+            for name, value in parameter_config.items()
+            if name in parameter_definitions
         ]
     )
 
 
-def bulk_set_device_parameters(device: Device, parameter_config: dict) -> None:
-    parameters = DeviceParameterDefinition.objects.filter(name__in=parameter_config.keys())
+def bulk_set_device_parameters(
+    device: Device, parameter_config: dict, parameter_definitions: dict
+) -> None:
     DeviceParameterValue.objects.bulk_create(
         [
             DeviceParameterValue(
                 device=device,
-                parameter=parameter,
-                value=parameter_config[parameter.name],
+                parameter=parameter_definitions[name],
+                value=value,
             )
-            for parameter in parameters
+            for name, value in parameter_config.items()
+            if name in parameter_definitions
         ]
     )
 
 
 def bulk_set_sm_device_installation_parameters(
-    device_installation: DeviceInstallation, parameter_config: dict
+    device_installation: DeviceInstallation, parameter_config: dict, parameter_definitions: dict
 ) -> None:
-    parameters = DeviceInstallationParameterDefinition.objects.filter(
-        name__in=parameter_config.keys()
-    )
     DeviceInstallationParameterValue.objects.bulk_create(
         [
             DeviceInstallationParameterValue(
                 device_installation=device_installation,
-                parameter=parameter,
-                start_value=parameter_config[parameter.name],
+                parameter=parameter_definitions[name],
+                start_value=value,
             )
-            for parameter in parameters
+            for name, value in parameter_config.items()
+            if name in parameter_definitions
         ]
     )
 
 
 def bulk_set_non_sm_device_installation_parameters(
-    device_installation: DeviceInstallation, parameter_config: dict
+    device_installation: DeviceInstallation, parameter_config: dict, parameter_definitions: dict
 ) -> None:
-    parameters = DeviceInstallationParameterDefinition.objects.filter(
-        name__in=parameter_config.keys()
-    )
     DeviceInstallationParameterValue.objects.bulk_create(
         [
             DeviceInstallationParameterValue(
                 device_installation=device_installation,
-                parameter=parameter,
-                end_value=parameter_config[parameter.name],
+                parameter=parameter_definitions[name],
+                end_value=value,
             )
-            for parameter in parameters
+            for name, value in parameter_config.items()
+            if name in parameter_definitions
         ]
     )
 
@@ -206,30 +206,24 @@ with DAG(
 ) as dag:
 
     @task.short_circuit
-    def get_jobs() -> list[dict]:
-        jobs_queryset = NonSmToSmJob.objects.filter(job_status=States.READY)
-        jobs: list = list(
-            jobs_queryset.values(
-                "job_id",
-                "non_sm_device_id",
-                "sm_device_id",
-                "consumer_id",
-                "service_point_id",
-                "payload",
+    def get_jobs() -> list[str]:
+        # Claim a bounded batch atomically so overlapping scheduler runs do not
+        # dispatch the same rows, and rows outside this batch remain READY.
+        with transaction.atomic():
+            job_ids = list(
+                NonSmToSmJob.objects.filter(job_status=States.READY)
+                .order_by("job_created_at", "job_id")
+                .select_for_update(skip_locked=True)
+                .values_list("job_id", flat=True)[:MAX_JOBS_PER_RUN]
             )
-        )
-        logger.info(f"Jobs found: {len(jobs)}")
-
-        if not jobs:
-            logger.info("No jobs found")
-            return []
-
-        else:
-            logger.info(f"Processing {len(jobs)} jobs")
-            logger.debug(f"Jobs: {jobs}")
-            updated_jobs = jobs_queryset.update(job_status=States.IN_PROGRESS)
-            logger.info(f"Updated {updated_jobs} job statuses to IN_PROGRESS")
-            return jobs
+            if job_ids:
+                updated_jobs = NonSmToSmJob.objects.filter(
+                    job_id__in=job_ids, job_status=States.READY
+                ).update(job_status=States.IN_PROGRESS)
+                logger.info("Claimed %s of %s READY jobs", updated_jobs, len(job_ids))
+            else:
+                logger.info("No READY jobs found")
+        return job_ids
 
     @task(
         retries=0,
@@ -246,17 +240,17 @@ with DAG(
                 - else rollback
         """,
     )
-    def task_1(job: dict) -> dict:
-
-        sm_device_id = job["sm_device_id"]
-        consumer_id = job["consumer_id"]
-
-        job_obj = NonSmToSmJob.objects.get(job_id=job["job_id"])
+    def task_1(job_id: str) -> dict:
+        job_obj = NonSmToSmJob.objects.only(
+            "job_id", "sm_device_id", "consumer_id", "payload", "job_message"
+        ).get(job_id=job_id)
+        sm_device_id = job_obj.sm_device_id
+        consumer_id = job_obj.consumer_id
         job_obj.job_message = f"{job_obj.job_message}\n Processing task 1"
-        job_obj.save()
+        job_obj.save(update_fields=["job_message", "job_run_at"])
 
         try:
-            body = NonSmartToSmartRequest.model_validate(job["payload"])
+            body = NonSmartToSmartRequest.model_validate(job_obj.payload)
             with transaction.atomic():
                 geographical_node = GeographicalNode.objects.get(name="Root")
                 electrical_node = ElectricalNode.objects.get(name="Root")
@@ -296,14 +290,55 @@ with DAG(
                 )
 
                 consumer_parameters = body.consumerMaster.model_dump(exclude={"accountId"})
+                sm_device_parameters = body.newMeterDetails.model_dump(exclude={"metersrno"})
+                sm_installation_parameters = sm_device_parameters
+                old_device_parameters = (
+                    body.oldMeterDetails.model_dump(exclude={"metersrno"})
+                    if body.oldMeterDetails
+                    else {}
+                )
+                old_installation_parameters = old_device_parameters
+
+                consumer_parameter_definitions = {
+                    parameter.name: parameter
+                    for parameter in ConsumerParameterDefinition.objects.filter(
+                        name__in=consumer_parameters
+                    )
+                }
+                service_point_parameter_definitions = {
+                    parameter.name: parameter
+                    for parameter in ServicePointParameterDefinition.objects.filter(
+                        name__in=consumer_parameters
+                    )
+                }
+                device_parameter_names = set(sm_device_parameters) | set(old_device_parameters)
+                device_parameter_definitions = {
+                    parameter.name: parameter
+                    for parameter in DeviceParameterDefinition.objects.filter(
+                        name__in=device_parameter_names
+                    )
+                }
+                installation_parameter_names = set(sm_installation_parameters) | set(
+                    old_installation_parameters
+                )
+                installation_parameter_definitions = {
+                    parameter.name: parameter
+                    for parameter in DeviceInstallationParameterDefinition.objects.filter(
+                        name__in=installation_parameter_names
+                    )
+                }
 
                 # Set consumer parameters
                 bulk_set_consumer_parameters(
-                    consumer=consumer, parameter_config=consumer_parameters
+                    consumer=consumer,
+                    parameter_config=consumer_parameters,
+                    parameter_definitions=consumer_parameter_definitions,
                 )
                 # Set service point parameters
                 bulk_set_service_point_parameters(
-                    service_point=service_point, parameter_config=consumer_parameters
+                    service_point=service_point,
+                    parameter_config=consumer_parameters,
+                    parameter_definitions=service_point_parameter_definitions,
                 )
 
                 sm_device_type_name = f"{body.newMeterDetails.metermake}_{body.newMeterDetails.meterphase}_{body.newMeterDetails.metercategory}"
@@ -322,7 +357,8 @@ with DAG(
                 # Set SM device parameters
                 bulk_set_device_parameters(
                     device=sm_device,
-                    parameter_config=body.newMeterDetails.model_dump(exclude={"metersrno"}),
+                    parameter_config=sm_device_parameters,
+                    parameter_definitions=device_parameter_definitions,
                 )
 
                 # Create SM device installation
@@ -336,7 +372,8 @@ with DAG(
                 # Set parameters for sm device installation
                 bulk_set_sm_device_installation_parameters(
                     device_installation=sm_device_installation,
-                    parameter_config=body.newMeterDetails.model_dump(exclude={"metersrno"}),
+                    parameter_config=sm_installation_parameters,
+                    parameter_definitions=installation_parameter_definitions,
                 )
 
                 # Get non sm device type and template
@@ -361,7 +398,8 @@ with DAG(
                     # Set parameters for non sm device
                     bulk_set_device_parameters(
                         device=non_sm_device,
-                        parameter_config=body.oldMeterDetails.model_dump(exclude={"metersrno"}),
+                        parameter_config=old_device_parameters,
+                        parameter_definitions=device_parameter_definitions,
                     )
 
                     # Un-install old non_sm_device
@@ -376,19 +414,19 @@ with DAG(
                     # Set parameters for non sm device uninstallation
                     bulk_set_non_sm_device_installation_parameters(
                         device_installation=non_sm_device_installation,
-                        parameter_config=body.oldMeterDetails.model_dump(exclude={"metersrno"}),
+                        parameter_config=old_installation_parameters,
+                        parameter_definitions=installation_parameter_definitions,
                     )
                 job_obj.service_point_id = service_point.id
                 job_obj.job_message = f"{job_obj.job_message}\n Task 1 MDM Asset creation completed"
-                job_obj.save()
-                job["service_point_id"] = service_point_id
-            logger.info(f"Task 1 completed successfully for job {job_obj.job_id}")
-            return job
+                job_obj.save(update_fields=["service_point_id", "job_message", "job_run_at"])
+            logger.info("Task 1 completed successfully for job %s", job_obj.job_id)
+            return {"job_id": job_obj.job_id, "service_point_id": service_point_id}
         except Exception as e:
             logger.error(f"Error in task_1: {e}")
             job_obj.job_status = States.FAILED
             job_obj.job_message = str(e)
-            job_obj.save()
+            job_obj.save(update_fields=["job_status", "job_message", "job_run_at"])
             raise e
 
     @task(
@@ -403,18 +441,19 @@ with DAG(
         """,
     )
     def task_2(job: dict) -> dict:
-
-        job_obj = NonSmToSmJob.objects.get(job_id=job["job_id"])
+        job_obj = NonSmToSmJob.objects.only(
+            "job_id", "consumer_id", "sm_device_id", "payload", "job_message", "job_status"
+        ).get(job_id=job["job_id"])
 
         job_obj.job_message = f"{job_obj.job_message}\n Processing task 2"
-        job_obj.save()
+        job_obj.save(update_fields=["job_message", "job_run_at"])
 
-        body: NonSmartToSmartRequest = NonSmartToSmartRequest.model_validate(job["payload"])
+        body: NonSmartToSmartRequest = NonSmartToSmartRequest.model_validate(job_obj.payload)
         group_uuid = "e327f3e7-774d-48e2-b44a-f26e5b3a9434"
         # Create customer
         try:
             client_v2.createCustomer(
-                customerId=job["consumer_id"],
+                customerId=job_obj.consumer_id,
                 language="en",
                 timeZone="Asia/Kolkata",
                 typeof="unknown",
@@ -425,7 +464,7 @@ with DAG(
             job_obj.job_message = (
                 f"{job_obj.job_message} > zonos customer creation failed ({repr(e)})"
             )
-            job_obj.save()
+            job_obj.save(update_fields=["job_status", "job_message", "job_run_at"])
             raise e
 
         # Create Metering Point
@@ -442,7 +481,7 @@ with DAG(
             job_obj.job_message = (
                 f"{job_obj.job_message} > zonos metering point creation failed ({repr(e)})"
             )
-            job_obj.save()
+            job_obj.save(update_fields=["job_status", "job_message", "job_run_at"])
             raise e
 
         # Set Metering Point parameters
@@ -466,12 +505,12 @@ with DAG(
             job_obj.job_message = (
                 f"{job_obj.job_message} > zonos metering point parameters set failed ({repr(e)})"
             )
-            job_obj.save()
+            job_obj.save(update_fields=["job_status", "job_message", "job_run_at"])
             raise e
 
         # Create Device
         try:
-            device_id = job["sm_device_id"]
+            device_id = job_obj.sm_device_id
             device_type_template_name = f"{body.newMeterDetails.metermake}_{body.newMeterDetails.meterphase}_{body.newMeterDetails.metercategory}"
             logger.info(f"Device type template name: {device_type_template_name}")
             device_type_uuid = str(DeviceType.objects.get(name=device_type_template_name).id)
@@ -520,20 +559,14 @@ with DAG(
             job_obj.job_message = (
                 f"{job_obj.job_message} > zonos device creation failed ({repr(e)})"
             )
-            job_obj.save()
+            job_obj.save(update_fields=["job_status", "job_message", "job_run_at"])
             raise e
 
-        return job
-
-    @task
-    def complete_job_status(job: dict) -> None:
-        job_obj = NonSmToSmJob.objects.get(job_id=job["job_id"])
         job_obj.job_status = States.COMPLETED
         job_obj.job_message = f"{job_obj.job_message}\n Task 2 Zonos Asset creation completed"
-        job_obj.save()
+        job_obj.save(update_fields=["job_status", "job_message", "job_run_at"])
+        return job
 
-    jobs = get_jobs()
-
-    task_1 = task_1.expand(job=jobs)
-    task_2 = task_2.expand(job=task_1)
-    complete_job_status.expand(job=task_2)
+    job_ids = get_jobs()
+    mdm_assets = task_1.expand(job_id=job_ids)
+    task_2.expand(job=mdm_assets)
